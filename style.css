@@ -1,0 +1,326 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0f1a;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .speech-card {
+            max-width: 800px;
+            width: 100%;
+            background: #121826;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .app-header {
+            background: #0d1117;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            border-bottom: 1px solid #1f2a3e;
+        }
+
+        .title-section h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #eef2ff;
+        }
+
+        .title-section h1 i {
+            color: #f97316;
+            font-size: 1.7rem;
+        }
+
+        .title-section p {
+            font-size: 0.8rem;
+            color: #8b9bb0;
+            margin-top: 0.25rem;
+        }
+
+        .voice-selector {
+            background: #1a2330;
+            padding: 0.45rem 1rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            border: 1px solid #2d3a4e;
+        }
+
+        .voice-selector label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #b9c7d9;
+        }
+
+        #voiceSelect {
+            background: #0d1117;
+            border: 1px solid #2d3a4e;
+            padding: 0.45rem 1rem;
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #eef2ff;
+            cursor: pointer;
+            outline: none;
+            min-width: 180px;
+        }
+
+        .main-content {
+            padding: 2rem 2rem 1.8rem;
+        }
+
+        .textarea-container {
+            background: #0b1017;
+            border-radius: 1.5rem;
+            border: 1px solid #253040;
+            transition: 0.2s;
+        }
+
+        .textarea-container:focus-within {
+            border-color: #f97316;
+            box-shadow: 0 0 0 2px rgba(249,115,22,0.2);
+        }
+
+        textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 1.3rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.55;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            color: #e2e8f0;
+            font-weight: 450;
+            min-height: 200px;
+        }
+
+        textarea::placeholder {
+            color: #4a5b77;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.7rem;
+            padding: 0 0.3rem;
+        }
+
+        .char-counter {
+            font-size: 0.75rem;
+            background: #10161f;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            color: #9aaec9;
+            border: 1px solid #253040;
+        }
+
+        .char-counter span {
+            font-weight: 700;
+            color: #f97316;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin: 1.8rem 0 1.2rem;
+        }
+
+        .btn {
+            flex: 1 1 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            background: #10161f;
+            border: 1px solid #2a374a;
+            padding: 0.8rem 0.7rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.2s ease;
+            color: #d1dbe8;
+        }
+
+        .btn i {
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #f97316;
+            border-color: #f97316;
+            color: #0a0f1a;
+            box-shadow: 0 2px 8px rgba(249,115,22,0.2);
+        }
+
+        .btn-primary:hover {
+            background: #fd7f2c;
+            transform: translateY(-2px);
+            border-color: #fd7f2c;
+        }
+
+        .btn-outline {
+            background: #10161f;
+            border-color: #2d3a4e;
+        }
+
+        .btn-outline:hover {
+            background: #1a2535;
+            border-color: #4a617c;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #1e1826;
+            border-color: #4a2a3a;
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover {
+            background: #2a1a2a;
+            border-color: #b91c1c;
+            color: #ffc4c4;
+        }
+
+        .status-area {
+            background: #0d1119;
+            border-radius: 1.5rem;
+            margin-top: 1.5rem;
+            padding: 0.85rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            border: 1px solid #253040;
+        }
+
+        .speech-status {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #b9c7d9;
+            font-size: 0.85rem;
+        }
+
+        .speech-status i {
+            font-size: 1rem;
+            color: #f97316;
+        }
+
+        .rate-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #0b1017;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #2a374a;
+        }
+
+        .rate-control label {
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: #b9c7d9;
+        }
+
+        #rateValue {
+            font-weight: 700;
+            min-width: 45px;
+            background: #1a2330;
+            padding: 0.2rem 0.5rem;
+            border-radius: 30px;
+            text-align: center;
+            color: #f97316;
+            font-size: 0.8rem;
+        }
+
+        input[type="range"] {
+            width: 140px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: #2d3a4e;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #f97316;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 4px #f97316;
+            border: none;
+        }
+
+        .app-footer {
+            background: #0b1017;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            border-top: 1px solid #1f2a3e;
+            font-size: 0.8rem;
+        }
+
+        .app-footer a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #f97316;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .app-footer a:hover {
+            color: #ffaa66;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+            .action-buttons .btn {
+                padding: 0.65rem 0.4rem;
+                font-size: 0.8rem;
+            }
+            .voice-selector {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+  
