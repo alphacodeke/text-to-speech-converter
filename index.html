@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Text to Speech | ALPHACODE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0f1a;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .speech-card {
+            max-width: 800px;
+            width: 100%;
+            background: #121826;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .app-header {
+            background: #0d1117;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            border-bottom: 1px solid #1f2a3e;
+        }
+
+        .title-section h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #eef2ff;
+        }
+
+        .title-section h1 i {
+            color: #f97316;
+            font-size: 1.7rem;
+        }
+
+        .title-section p {
+            font-size: 0.8rem;
+            color: #8b9bb0;
+            margin-top: 0.25rem;
+        }
+
+        .voice-selector {
+            background: #1a2330;
+            padding: 0.45rem 1rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            border: 1px solid #2d3a4e;
+        }
+
+        .voice-selector label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #b9c7d9;
+        }
+
+        #voiceSelect {
+            background: #0d1117;
+            border: 1px solid #2d3a4e;
+            padding: 0.45rem 1rem;
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #eef2ff;
+            cursor: pointer;
+            outline: none;
+            min-width: 180px;
+        }
+
+        .main-content {
+            padding: 2rem 2rem 1.8rem;
+        }
+
+        .textarea-container {
+            background: #0b1017;
+            border-radius: 1.5rem;
+            border: 1px solid #253040;
+            transition: 0.2s;
+        }
+
+        .textarea-container:focus-within {
+            border-color: #f97316;
+            box-shadow: 0 0 0 2px rgba(249,115,22,0.2);
+        }
+
+        textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 1.3rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.55;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            color: #e2e8f0;
+            font-weight: 450;
+            min-height: 200px;
+        }
+
+        textarea::placeholder {
+            color: #4a5b77;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.7rem;
+            padding: 0 0.3rem;
+        }
+
+        .char-counter {
+            font-size: 0.75rem;
+            background: #10161f;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            color: #9aaec9;
+            border: 1px solid #253040;
+        }
+
+        .char-counter span {
+            font-weight: 700;
+            color: #f97316;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin: 1.8rem 0 1.2rem;
+        }
+
+        .btn {
+            flex: 1 1 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            background: #10161f;
+            border: 1px solid #2a374a;
+            padding: 0.8rem 0.7rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.2s ease;
+            color: #d1dbe8;
+        }
+
+        .btn i {
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #f97316;
+            border-color: #f97316;
+            color: #0a0f1a;
+            box-shadow: 0 2px 8px rgba(249,115,22,0.2);
+        }
+
+        .btn-primary:hover {
+            background: #fd7f2c;
+            transform: translateY(-2px);
+            border-color: #fd7f2c;
+        }
+
+        .btn-outline {
+            background: #10161f;
+            border-color: #2d3a4e;
+        }
+
+        .btn-outline:hover {
+            background: #1a2535;
+            border-color: #4a617c;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #1e1826;
+            border-color: #4a2a3a;
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover {
+            background: #2a1a2a;
+            border-color: #b91c1c;
+            color: #ffc4c4;
+        }
+
+        .status-area {
+            background: #0d1119;
+            border-radius: 1.5rem;
+            margin-top: 1.5rem;
+            padding: 0.85rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            border: 1px solid #253040;
+        }
+
+        .speech-status {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #b9c7d9;
+            font-size: 0.85rem;
+        }
+
+        .speech-status i {
+            font-size: 1rem;
+            color: #f97316;
+        }
+
+        .rate-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #0b1017;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #2a374a;
+        }
+
+        .rate-control label {
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: #b9c7d9;
+        }
+
+        #rateValue {
+            font-weight: 700;
+            min-width: 45px;
+            background: #1a2330;
+            padding: 0.2rem 0.5rem;
+            border-radius: 30px;
+            text-align: center;
+            color: #f97316;
+            font-size: 0.8rem;
+        }
+
+        input[type="range"] {
+            width: 140px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: #2d3a4e;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #f97316;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 4px #f97316;
+            border: none;
+        }
+
+        .app-footer {
+            background: #0b1017;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            border-top: 1px solid #1f2a3e;
+            font-size: 0.8rem;
+        }
+
+        .app-footer a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #f97316;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .app-footer a:hover {
+            color: #ffaa66;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+            .action-buttons .btn {
+                padding: 0.65rem 0.4rem;
+                font-size: 0.8rem;
+            }
+            .voice-selector {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="speech-card">
+    <div class="app-header">
+        <div class="title-section">
+            <h1>
+                <i class="fas fa-head-side-vr"></i> 
+                Text to Speech
+            </h1>
+            <p>Natural voice synthesis · Zero echo</p>
+        </div>
+        <div class="voice-selector">
+            <label><i class="fas fa-microphone-alt"></i> Voice</label>
+            <select id="voiceSelect"></select>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="textarea-container">
+            <textarea id="textInput" placeholder="Write or paste your text here... (max 3000 characters)"></textarea>
+        </div>
+        <div class="info-row">
+            <div class="char-counter">
+                <i class="far fa-keyboard"></i> Characters: <span id="charCount">0</span> / 3000
+            </div>
+            <div class="char-counter">
+                <i class="fas fa-waveform"></i> Web Speech API
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="speakBtn">
+                <i class="fas fa-play"></i> Speak
+            </button>
+            <button class="btn btn-outline" id="pauseBtn">
+                <i class="fas fa-pause"></i> Pause
+            </button>
+            <button class="btn btn-outline" id="resumeBtn">
+                <i class="fas fa-play-circle"></i> Resume
+            </button>
+            <button class="btn btn-danger" id="stopBtn">
+                <i class="fas fa-stop"></i> Stop
+            </button>
+            <button class="btn btn-outline" id="clearBtn">
+                <i class="fas fa-trash-alt"></i> Clear
+            </button>
+        </div>
+
+        <div class="status-area">
+            <div class="speech-status">
+                <i class="fas fa-circle-info"></i>
+                <span id="statusMsg">Ready — type text and press Speak</span>
+            </div>
+            <div class="rate-control">
+                <label><i class="fas fa-gauge-high"></i> Speed</label>
+                <input type="range" id="rateSlider" min="0.5" max="2.0" step="0.05" value="1.0">
+                <span id="rateValue">1.0x</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-footer">
+        Powered by <a href="https://anthonyke.netlify.app/" target="_blank" rel="noopener noreferrer"><i class="fas fa-crown"></i> ALPHACODE</a> leading to innovation
+    </div>
+</div>
+
+<script>
+(function(){
+    const textarea = document.getElementById('textInput');
+    const charCountSpan = document.getElementById('charCount');
+    const speakBtn = document.getElementById('speakBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resumeBtn = document.getElementById('resumeBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const rateSlider = document.getElementById('rateSlider');
+    const rateValue = document.getElementById('rateValue');
+    const statusSpan = document.getElementById('statusMsg');
+
+    let synth = window.speechSynthesis;
+    let currentUtterance = null;
+    let availableVoices = [];
+    let isPausedByUser = false;
+    let activeSpeakingRequest = false;
+    const MAX_CHARS = 3000;
+
+    function updateCharCounter() {
+        let rawText = textarea.value;
+        if (rawText.length > MAX_CHARS) {
+            rawText = rawText.substring(0, MAX_CHARS);
+            textarea.value = rawText;
+        }
+        charCountSpan.innerText = rawText.length;
+    }
+
+    textarea.addEventListener('input', updateCharCounter);
+
+    function safeCancel(resetUtterance = true) {
+        if (synth.speaking || synth.pending) {
+            synth.cancel();
+        }
+        if (resetUtterance) {
+            currentUtterance = null;
+        }
+        isPausedByUser = false;
+        activeSpeakingRequest = false;
+    }
+
+    function setStatusMessage(msg, isPersistent = false) {
+        statusSpan.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+        if (!isPersistent) {
+            setTimeout(() => {
+                if (statusSpan.innerHTML.includes(msg) && !synth.speaking && !synth.paused) {
+                    statusSpan.innerHTML = `<i class="fas fa-circle-info"></i> Ready — type text and press Speak`;
+                } else if (synth.speaking && !synth.paused && statusSpan.innerHTML.includes(msg)) {
+                    statusSpan.innerHTML = `<i class="fas fa-waveform"></i> Speaking...`;
+                }
+            }, 2500);
+        }
+    }
+
+    function updateSpeakingStatus() {
+        if (synth.speaking && !synth.paused) {
+            statusSpan.innerHTML = `<i class="fas fa-waveform"></i> Speaking...`;
+        } else if (synth.paused) {
+            statusSpan.innerHTML = `<i class="fas fa-pause-circle"></i> Speech paused`;
+        } else if (!synth.speaking && !synth.pending) {
+            if (!activeSpeakingRequest) {
+                statusSpan.innerHTML = `<i class="fas fa-circle-info"></i> Ready — type text and press Speak`;
+            }
+        }
+    }
+
+    function loadVoices() {
+        return new Promise((resolve) => {
+            let voices = synth.getVoices();
+            if (voices.length) {
+                resolve(voices);
+            } else {
+                synth.addEventListener('voiceschanged', () => {
+                    resolve(synth.getVoices());
+                }, { once: true });
+            }
+        });
+    }
+
+    function populateVoiceList(voices) {
+        availableVoices = voices;
+        voiceSelect.innerHTML = '';
+        if (!voices.length) {
+            let opt = document.createElement('option');
+            opt.textContent = 'No voices available';
+            opt.disabled = true;
+            voiceSelect.appendChild(opt);
+            return;
+        }
+        voices.forEach((voice, idx) => {
+            let option = document.createElement('option');
+            option.value = idx;
+            option.textContent = `${voice.name} (${voice.lang})`;
+            if (voice.default && !voiceSelect.value) {
+                option.selected = true;
+            }
+            voiceSelect.appendChild(option);
+        });
+        if (!voiceSelect.value && voices.length) voiceSelect.selectedIndex = 0;
+    }
+
+    loadVoices().then(voices => populateVoiceList(voices));
+
+    voiceSelect.addEventListener('change', () => {
+        if (availableVoices.length && voiceSelect.value) {
+            let idx = parseInt(voiceSelect.value, 10);
+            if (!isNaN(idx) && availableVoices[idx]) {
+                setStatusMessage(`Voice: ${availableVoices[idx].name}`, false);
+            }
+        }
+    });
+
+    rateSlider.addEventListener('input', (e) => {
+        let val = parseFloat(e.target.value);
+        rateValue.innerText = val.toFixed(2) + 'x';
+    });
+
+    function getCurrentRate() {
+        return parseFloat(rateSlider.value);
+    }
+
+    function getSelectedVoiceObj() {
+        if (!availableVoices.length) return null;
+        let idx = parseInt(voiceSelect.value, 10);
+        if (isNaN(idx)) return availableVoices[0] || null;
+        return availableVoices[idx] || availableVoices[0];
+    }
+
+    function prepareUtterance() {
+        let rawText = textarea.value.trim();
+        if (rawText === "") {
+            setStatusMessage("Cannot speak: text is empty", false);
+            return null;
+        }
+        if (rawText.length > MAX_CHARS) {
+            rawText = rawText.substring(0, MAX_CHARS);
+            textarea.value = rawText;
+            updateCharCounter();
+        }
+        const utterance = new SpeechSynthesisUtterance(rawText);
+        const voice = getSelectedVoiceObj();
+        if (voice) utterance.voice = voice;
+        utterance.rate = getCurrentRate();
+        utterance.pitch = 1.0;
+        utterance.volume = 1;
+        return utterance;
+    }
+
+    function attachUtteranceEvents(utterance) {
+        utterance.onstart = () => {
+            activeSpeakingRequest = true;
+            isPausedByUser = false;
+            statusSpan.innerHTML = `<i class="fas fa-waveform"></i> Speaking...`;
+        };
+        utterance.onend = () => {
+            activeSpeakingRequest = false;
+            currentUtterance = null;
+            isPausedByUser = false;
+            statusSpan.innerHTML = `<i class="fas fa-circle-info"></i> Ready — type text and press Speak`;
+            if (synth.speaking) synth.cancel();
+        };
+        utterance.onerror = (event) => {
+            console.warn("Speech error", event.error);
+            activeSpeakingRequest = false;
+            let errMsg = "Speech error";
+            if (event.error === 'interrupted') errMsg = "Interrupted";
+            else if (event.error === 'synthesis-failed') errMsg = "Voice synthesis failed";
+            else if (event.error === 'voice-unavailable') errMsg = "Selected voice unavailable";
+            setStatusMessage(errMsg, false);
+            statusSpan.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errMsg}`;
+            currentUtterance = null;
+            isPausedByUser = false;
+            setTimeout(() => {
+                if (!synth.speaking && !synth.paused) updateSpeakingStatus();
+            }, 1200);
+        };
+        utterance.onpause = () => {
+            isPausedByUser = true;
+            statusSpan.innerHTML = `<i class="fas fa-pause-circle"></i> Speech paused`;
+        };
+        utterance.onresume = () => {
+            isPausedByUser = false;
+            statusSpan.innerHTML = `<i class="fas fa-waveform"></i> Speaking...`;
+        };
+    }
+
+    function handleSpeak() {
+        if (synth.speaking && !synth.paused) {
+            safeCancel(true);
+        }
+        if (synth.paused) {
+            safeCancel(true);
+        }
+        if (currentUtterance && (synth.speaking || synth.pending)) {
+            safeCancel(true);
+        }
+        const newUtter = prepareUtterance();
+        if (!newUtter) return;
+        attachUtteranceEvents(newUtter);
+        currentUtterance = newUtter;
+        try {
+            synth.speak(currentUtterance);
+        } catch (err) {
+            setStatusMessage("Speech failed: " + err.message, false);
+            currentUtterance = null;
+            activeSpeakingRequest = false;
+        }
+    }
+
+    function handlePause() {
+        if (synth.speaking && !synth.paused) {
+            synth.pause();
+            setStatusMessage("Paused", false);
+            updateSpeakingStatus();
+        } else if (synth.paused) {
+            setStatusMessage("Already paused, press Resume", false);
+        } else if (!synth.speaking) {
+            setStatusMessage("No active speech to pause", false);
+        }
+    }
+
+    function handleResume() {
+        if (synth.paused) {
+            synth.resume();
+            setStatusMessage("Resumed", false);
+            updateSpeakingStatus();
+        } else if (synth.speaking && !synth.paused) {
+            setStatusMessage("Already speaking", false);
+        } else {
+            setStatusMessage("Nothing to resume, click Speak", false);
+        }
+    }
+
+    function handleStop() {
+        if (synth.speaking || synth.paused || synth.pending) {
+            safeCancel(true);
+            setStatusMessage("Stopped", false);
+            updateSpeakingStatus();
+        } else {
+            setStatusMessage("No speech to stop", false);
+        }
+    }
+
+    function handleClear() {
+        if (synth.speaking || synth.paused || synth.pending) {
+            safeCancel(true);
+        }
+        textarea.value = "";
+        updateCharCounter();
+        setStatusMessage("Text cleared", false);
+        updateSpeakingStatus();
+    }
+
+    speakBtn.addEventListener('click', handleSpeak);
+    pauseBtn.addEventListener('click', handlePause);
+    resumeBtn.addEventListener('click', handleResume);
+    stopBtn.addEventListener('click', handleStop);
+    clearBtn.addEventListener('click', handleClear);
+
+    updateCharCounter();
+
+    setInterval(() => {
+        if (!synth.speaking && !synth.paused && activeSpeakingRequest) {
+            activeSpeakingRequest = false;
+            if (currentUtterance) currentUtterance = null;
+            updateSpeakingStatus();
+        }
+        if (synth.speaking && !synth.paused && !activeSpeakingRequest) {
+            activeSpeakingRequest = true;
+        }
+        if (!synth.speaking && !synth.paused && !activeSpeakingRequest) {
+            if (statusSpan.innerHTML.includes("Speaking") || statusSpan.innerHTML.includes("paused")) {
+                if (!statusSpan.innerHTML.includes("Ready")) {
+                    statusSpan.innerHTML = `<i class="fas fa-circle-info"></i> Ready — type text and press Speak`;
+                }
+            }
+        }
+    }, 300);
+
+    window.addEventListener('beforeunload', () => {
+        if (synth.speaking) synth.cancel();
+    });
+
+    if (typeof window !== 'undefined' && !synth.getVoices().length) {
+        setTimeout(() => {
+            loadVoices().then(voices => {
+                if (voices.length && voiceSelect.options.length <= 1) {
+                    populateVoiceList(voices);
+                }
+            });
+        }, 180);
+    }
+})();
+</script>
+</body>
+</html>
